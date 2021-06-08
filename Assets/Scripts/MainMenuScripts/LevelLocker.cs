@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelLocker : MonoBehaviour {
+public class LevelLocker : MonoBehaviour
+{
 
     [SerializeField]
     private GameSaver gameSaverAux;
@@ -19,48 +20,64 @@ public class LevelLocker : MonoBehaviour {
     private bool[] transportPuzzleLevels;
     private bool[] fruitsPuzzleLevels;
 
-    void Awake() {
+    void Awake()
+    {
         DeactivatePadLockAndHolders();
     }
 
-    void Start() {
+    void Start()
+    {
         GetLevels();
     }
 
-    public void CheckWhichLevelsAreUnlock(string selectedPuzzle) {
+    public void CheckWhichLevelsAreUnlock(string selectedPuzzle)
+    {
 
         DeactivatePadLockAndHolders();
         GetLevels();
 
-        switch(selectedPuzzle) {
-            case "Candy Puzzle":
-                for(int i = 0; i < candyPuzzleLevels.Length; i++) {
-                    if(candyPuzzleLevels[i]) {
+        switch(selectedPuzzle)
+        {
+            case "CandyPuzzle":
+                for(int i = 0; i < candyPuzzleLevels.Length; i++)
+                {
+                    if(candyPuzzleLevels[i])
+                    {
                         levelStarsHolders[i].SetActive(true);
                         starsLockerAux.ActivateStars(i, selectedPuzzle);
-                    } else {
+                    }
+                    else
+                    {
                         levelPadLocks[i].SetActive(true);
                     }
                 }
 
                 break;
-            case "Transport Puzzle":
-                for(int i = 0; i < transportPuzzleLevels.Length; i++) {
-                    if(transportPuzzleLevels[i]) {
+            case "TransportPuzzle":
+                for(int i = 0; i < transportPuzzleLevels.Length; i++)
+                {
+                    if(transportPuzzleLevels[i])
+                    {
                         levelStarsHolders[i].SetActive(true);
                         starsLockerAux.ActivateStars(i, selectedPuzzle);
-                    } else {
+                    }
+                    else
+                    {
                         levelPadLocks[i].SetActive(true);
                     }
                 }
 
                 break;
-            case "Fruit Puzzle":
-                for(int i = 0; i < fruitsPuzzleLevels.Length; i++) {
-                    if(fruitsPuzzleLevels[i]) {
+            case "FruitPuzzle":
+                for(int i = 0; i < fruitsPuzzleLevels.Length; i++)
+                {
+                    if(fruitsPuzzleLevels[i])
+                    {
                         levelStarsHolders[i].SetActive(true);
                         starsLockerAux.ActivateStars(i, selectedPuzzle);
-                    } else {
+                    }
+                    else
+                    {
                         levelPadLocks[i].SetActive(true);
                     }
                 }
@@ -71,39 +88,37 @@ public class LevelLocker : MonoBehaviour {
 
     }
 
-    private void DeactivatePadLockAndHolders() {
+    private void DeactivatePadLockAndHolders()
+    {
 
-        for(int i = 0; i < levelStarsHolders.Length; i++) {
+        for(int i = 0; i < levelStarsHolders.Length; i++)
+        {
             levelStarsHolders[i].SetActive(false);
             levelPadLocks[i].SetActive(false);
         }
 
     }
 
-    private void GetLevels() {
+    private void GetLevels()
+    {
         candyPuzzleLevels = gameSaverAux.candyPuzzleLevels;
         transportPuzzleLevels = gameSaverAux.transportPuzzleLevels;
         fruitsPuzzleLevels = gameSaverAux.fruitsPuzzleLevels;
     }
 
-    public bool[] GetPuzzleLevels(string selectedPuzzle) {
-
-        switch(selectedPuzzle) {
-            case "Candy Puzzle":
+    public bool[] GetPuzzleLevels(string selectedPuzzle)
+    {
+        switch(selectedPuzzle)
+        {
+            case "CandyPuzzle":
                 return this.candyPuzzleLevels;
-                break;
-            case "Transport Puzzle":
+            case "TransportPuzzle":
                 return this.transportPuzzleLevels;
-                break;
-            case "Fruit Puzzle":
+            case "FruitPuzzle":
                 return this.fruitsPuzzleLevels;
-                break;
             default:
                 return null;
-                break;
         }
-
-
     }
 
 

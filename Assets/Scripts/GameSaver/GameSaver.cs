@@ -4,200 +4,230 @@ using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public class GameSaver : MonoBehaviour {
+public class GameSaver : MonoBehaviour
+{
 
-	private GameData gameData;
+    private GameData gameData;
 
-	public bool[] candyPuzzleLevels;
-	public bool[] transportPuzzleLevels;
-	public bool[] fruitsPuzzleLevels;
+    public bool[] candyPuzzleLevels;
+    public bool[] transportPuzzleLevels;
+    public bool[] fruitsPuzzleLevels;
 
-	public int[] candyPuzzleLevelStars;
-	public int[] transportPuzzleLevelStars;
-	public int[] fruitsPuzzleLevelStars;
+    public int[] candyPuzzleLevelStars;
+    public int[] transportPuzzleLevelStars;
+    public int[] fruitsPuzzleLevelStars;
 
-	private bool isGameStartedFirstTime;
+    private bool isGameStartedFirstTime;
 
-	public float musicVolume;
+    public float musicVolume;
 
-	void Awake(){
-		InitializeGame ();
-	}
+    void Awake()
+    {
+        InitializeGame();
+    }
 
-	void InitializeGame(){
-		
-		LoadGameData ();
+    void InitializeGame()
+    {
 
-		if (gameData != null) {
-			isGameStartedFirstTime = gameData.GetIsGameStartedFirstTime ();
-		} else {
-			isGameStartedFirstTime = true;
-		}
+        LoadGameData();
 
-		if (isGameStartedFirstTime) {
-			isGameStartedFirstTime = false;
+        if(gameData != null)
+        {
+            isGameStartedFirstTime = gameData.GetIsGameStartedFirstTime();
+        }
+        else
+        {
+            isGameStartedFirstTime = true;
+        }
 
-			candyPuzzleLevels = new bool[5];
-			transportPuzzleLevels = new bool[5];
-			fruitsPuzzleLevels = new bool[5];
+        if(isGameStartedFirstTime)
+        {
+            isGameStartedFirstTime = false;
 
-			candyPuzzleLevels [0] = true;
-			transportPuzzleLevels [0] = true;
-			fruitsPuzzleLevels [0] = true;
+            candyPuzzleLevels = new bool[5];
+            transportPuzzleLevels = new bool[5];
+            fruitsPuzzleLevels = new bool[5];
 
-			for (int i = 1; i < candyPuzzleLevels.Length; i++) {
-				candyPuzzleLevels [i] = false;
-				transportPuzzleLevels [i] = false;
-				fruitsPuzzleLevels [i] = false;
-			}
+            candyPuzzleLevels[0] = true;
+            transportPuzzleLevels[0] = true;
+            fruitsPuzzleLevels[0] = true;
 
-			candyPuzzleLevelStars = new int[5];
-			transportPuzzleLevelStars = new int[5];
-			fruitsPuzzleLevelStars = new int[5];
+            for(int i = 1; i < candyPuzzleLevels.Length; i++)
+            {
+                candyPuzzleLevels[i] = false;
+                transportPuzzleLevels[i] = false;
+                fruitsPuzzleLevels[i] = false;
+            }
 
-			for (int i = 0; i < candyPuzzleLevelStars.Length; i++) {
-				candyPuzzleLevelStars [i] = 0;
-				transportPuzzleLevelStars [i] = 0;
-				fruitsPuzzleLevelStars [i] = 0;
-			}
+            candyPuzzleLevelStars = new int[5];
+            transportPuzzleLevelStars = new int[5];
+            fruitsPuzzleLevelStars = new int[5];
 
-			musicVolume = 0;
+            for(int i = 0; i < candyPuzzleLevelStars.Length; i++)
+            {
+                candyPuzzleLevelStars[i] = 0;
+                transportPuzzleLevelStars[i] = 0;
+                fruitsPuzzleLevelStars[i] = 0;
+            }
 
-			gameData = new GameData ();
+            musicVolume = 0;
 
-			gameData.SetCandyPuzzleLevels(candyPuzzleLevels);
-			gameData.SetTransportPuzzleLevels(transportPuzzleLevels);
-			gameData.SetFruitsPuzzleLevels(fruitsPuzzleLevels);
+            gameData = new GameData();
 
-			gameData.SetCandyPuzzleLevelStars(candyPuzzleLevelStars);
-			gameData.SetTransportPuzzleLevelStars(transportPuzzleLevelStars);
-			gameData.SetFruitsPuzzleLevelStars(fruitsPuzzleLevelStars);
+            gameData.SetCandyPuzzleLevels(candyPuzzleLevels);
+            gameData.SetTransportPuzzleLevels(transportPuzzleLevels);
+            gameData.SetFruitsPuzzleLevels(fruitsPuzzleLevels);
 
-			gameData.SetIsGameStartedFirstTime(isGameStartedFirstTime);
-			gameData.SetMusicVolume(musicVolume);
+            gameData.SetCandyPuzzleLevelStars(candyPuzzleLevelStars);
+            gameData.SetTransportPuzzleLevelStars(transportPuzzleLevelStars);
+            gameData.SetFruitsPuzzleLevelStars(fruitsPuzzleLevelStars);
 
-			SaveGameData ();
-			LoadGameData ();
-		
-		}
+            gameData.SetIsGameStartedFirstTime(isGameStartedFirstTime);
+            gameData.SetMusicVolume(musicVolume);
 
-	}
+            SaveGameData();
+            LoadGameData();
 
-	public void SaveGameData(){
-		FileStream file = null;
+        }
 
-		try{
+    }
 
-			BinaryFormatter bf = new BinaryFormatter();
+    public void SaveGameData()
+    {
+        FileStream file = null;
 
-			file = File.Create(Application.persistentDataPath + "/GameData.dat");
+        try
+        {
 
-			if(gameData != null){
+            BinaryFormatter bf = new BinaryFormatter();
 
-				gameData.SetCandyPuzzleLevels(candyPuzzleLevels);
-				gameData.SetTransportPuzzleLevels(transportPuzzleLevels);
-				gameData.SetFruitsPuzzleLevels(fruitsPuzzleLevels);
+            file = File.Create(Application.persistentDataPath + "/GameData.dat");
 
-				gameData.SetCandyPuzzleLevelStars(candyPuzzleLevelStars);
-				gameData.SetTransportPuzzleLevelStars(transportPuzzleLevelStars);
-				gameData.SetFruitsPuzzleLevelStars(fruitsPuzzleLevelStars);
+            if(gameData != null)
+            {
 
-				gameData.SetIsGameStartedFirstTime(isGameStartedFirstTime);
-				gameData.SetMusicVolume(musicVolume);
+                gameData.SetCandyPuzzleLevels(candyPuzzleLevels);
+                gameData.SetTransportPuzzleLevels(transportPuzzleLevels);
+                gameData.SetFruitsPuzzleLevels(fruitsPuzzleLevels);
 
-				bf.Serialize(file, gameData);
+                gameData.SetCandyPuzzleLevelStars(candyPuzzleLevelStars);
+                gameData.SetTransportPuzzleLevelStars(transportPuzzleLevelStars);
+                gameData.SetFruitsPuzzleLevelStars(fruitsPuzzleLevelStars);
 
-			}
-				
-		}catch(Exception e){
-		
-		}finally{
-			if (file != null) {
-				file.Close ();
-			}
-		}
+                gameData.SetIsGameStartedFirstTime(isGameStartedFirstTime);
+                gameData.SetMusicVolume(musicVolume);
 
-	}
+                bf.Serialize(file, gameData);
 
-	void LoadGameData(){
-		FileStream file = null;
+            }
 
-		try{
-			
-			BinaryFormatter bf = new BinaryFormatter();
+        }
+        catch(Exception e)
+        {
 
-			file = File.Open(Application.persistentDataPath + "/GameData.dat", FileMode.Open);
+        }
+        finally
+        {
+            if(file != null)
+            {
+                file.Close();
+            }
+        }
 
-			gameData = (GameData)bf.Deserialize(file);
+    }
 
-			if(gameData != null){
-				candyPuzzleLevels = gameData.GetCandyPuzzleLevels();
-				transportPuzzleLevels = gameData.GetTransportPuzzleLevels();
-				fruitsPuzzleLevels = gameData.GetFruitsPuzzleLevels();
+    void LoadGameData()
+    {
+        FileStream file = null;
 
-				candyPuzzleLevelStars = gameData.GetCandyPuzzleLevelStars();
-				transportPuzzleLevelStars = gameData.GetTransportPuzzleLevelStars();
-				fruitsPuzzleLevelStars = gameData.GetFruitsPuzzleLevelStars();
+        try
+        {
 
-				isGameStartedFirstTime = gameData.GetIsGameStartedFirstTime();
-				musicVolume = gameData.GetMusicVolume();
+            BinaryFormatter bf = new BinaryFormatter();
 
-			}
+            file = File.Open(Application.persistentDataPath + "/GameData.dat", FileMode.Open);
 
-		}catch(Exception e){
+            gameData = (GameData)bf.Deserialize(file);
 
-		}finally{
-			if (file != null) {
-				file.Close ();
-			}
-		}
-	}
+            if(gameData != null)
+            {
+                candyPuzzleLevels = gameData.GetCandyPuzzleLevels();
+                transportPuzzleLevels = gameData.GetTransportPuzzleLevels();
+                fruitsPuzzleLevels = gameData.GetFruitsPuzzleLevels();
 
-	public void Save(int selectedLevel, string selectedPuzzle, int stars){
-	
-		int unlockNextLevel = -1;
+                candyPuzzleLevelStars = gameData.GetCandyPuzzleLevelStars();
+                transportPuzzleLevelStars = gameData.GetTransportPuzzleLevelStars();
+                fruitsPuzzleLevelStars = gameData.GetFruitsPuzzleLevelStars();
 
-		switch (selectedPuzzle) {
-		case "Candy Puzzle":
+                isGameStartedFirstTime = gameData.GetIsGameStartedFirstTime();
+                musicVolume = gameData.GetMusicVolume();
 
-			unlockNextLevel = selectedLevel;
+            }
 
-			candyPuzzleLevelStars [selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
+        }
+        catch(Exception e)
+        {
 
-			if (unlockNextLevel < candyPuzzleLevels.Length) {
-				candyPuzzleLevels [unlockNextLevel] = true;
-			}
+        }
+        finally
+        {
+            if(file != null)
+            {
+                file.Close();
+            }
+        }
+    }
 
-			break;
+    public void Save(int selectedLevel, string selectedPuzzle, int stars)
+    {
 
-		case "Transport Puzzle":
+        int unlockNextLevel = -1;
 
-			unlockNextLevel = selectedLevel;
+        switch(selectedPuzzle)
+        {
+            case "CandyPuzzle":
 
-			transportPuzzleLevelStars [selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
+                unlockNextLevel = selectedLevel;
 
-			if (unlockNextLevel < transportPuzzleLevels.Length) {
-				transportPuzzleLevels [unlockNextLevel] = true;
-			}
+                candyPuzzleLevelStars[selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
 
-			break;
+                if(unlockNextLevel < candyPuzzleLevels.Length)
+                {
+                    candyPuzzleLevels[unlockNextLevel] = true;
+                }
 
-		case "Fruit Puzzle":
+                break;
 
-			unlockNextLevel = selectedLevel;
+            case "TransportPuzzle":
 
-			fruitsPuzzleLevelStars [selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
+                unlockNextLevel = selectedLevel;
 
-			if (unlockNextLevel < fruitsPuzzleLevels.Length) {
-				fruitsPuzzleLevels [unlockNextLevel] = true;
-			}
+                transportPuzzleLevelStars[selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
 
-			break;
+                if(unlockNextLevel < transportPuzzleLevels.Length)
+                {
+                    transportPuzzleLevels[unlockNextLevel] = true;
+                }
+
+                break;
+
+            case "FruitPuzzle":
+
+                unlockNextLevel = selectedLevel;
+
+                fruitsPuzzleLevelStars[selectedLevel - 1] = stars; //Como os níveis estão nomeados começando de 1 é necessário corrigir com -1
+
+                if(unlockNextLevel < fruitsPuzzleLevels.Length)
+                {
+                    fruitsPuzzleLevels[unlockNextLevel] = true;
+                }
+
+                break;
 
 
-		}
+        }
 
-	}
+    }
 
 
 }

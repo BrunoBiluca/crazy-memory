@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MusicController : MonoBehaviour {
+public class MusicController : MonoBehaviour
+{
 
     [SerializeField]
     private GameSaver gameSaverAux;
@@ -10,40 +11,51 @@ public class MusicController : MonoBehaviour {
 
     private float musicVolume;
 
-    void Awake() {
+    void Awake()
+    {
         GetAudioSource();
     }
 
-    void Start() {
+    void Start()
+    {
         musicVolume = gameSaverAux.musicVolume;
         PlayOrTurnOffMusic(musicVolume);
     }
 
-    void GetAudioSource() {
+    void GetAudioSource()
+    {
         bgMusicClip = GetComponent<AudioSource>();
     }
 
-    public float GetMusicVolume() {
+    public float GetMusicVolume()
+    {
         return this.musicVolume;
     }
 
-    public void SetMusicVolume(float volume) {
+    public void SetMusicVolume(float volume)
+    {
         PlayOrTurnOffMusic(volume);
     }
 
-    void PlayOrTurnOffMusic(float volume) {
+    void PlayOrTurnOffMusic(float volume)
+    {
         musicVolume = volume;
         bgMusicClip.volume = musicVolume;
 
-        if(bgMusicClip.volume > 0) {
-            if(!bgMusicClip.isPlaying) {
+        if(bgMusicClip.volume > 0)
+        {
+            if(!bgMusicClip.isPlaying)
+            {
                 bgMusicClip.Play();
             }
 
             gameSaverAux.musicVolume = musicVolume;
             gameSaverAux.SaveGameData();
-        } else if(musicVolume == 0) {
-            if(bgMusicClip.isPlaying) {
+        }
+        else if(musicVolume == 0)
+        {
+            if(bgMusicClip.isPlaying)
+            {
                 bgMusicClip.Stop();
             }
 

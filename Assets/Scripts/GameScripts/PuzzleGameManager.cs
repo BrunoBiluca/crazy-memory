@@ -2,201 +2,229 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class PuzzleGameManager : MonoBehaviour {
+public class PuzzleGameManager : MonoBehaviour
+{
 
-	[SerializeField]
-	private GameSaver gameSaverAux;
+    [SerializeField]
+    private GameSaver gameSaverAux;
 
-	[SerializeField]
-	private GameFineshed gameFineshedAux;
+    [SerializeField]
+    private GameFineshed gameFineshedAux;
 
-	[SerializeField]
-	private List<Button> puzzleButtons = new List<Button> ();
-	private List<Animator> puzzleButtonsAnimators = new List<Animator>();
+    [SerializeField]
+    private List<Button> puzzleButtons = new List<Button>();
+    private List<Animator> puzzleButtonsAnimators = new List<Animator>();
 
-	[SerializeField]
-	private List<Sprite> puzzleGameSprites = new List<Sprite> ();
+    [SerializeField]
+    private List<Sprite> puzzleGameSprites = new List<Sprite>();
 
-	private int selectedLevel;
-	private string selectedPuzzle;
+    private int selectedLevel;
+    private string selectedPuzzle;
 
-	private Sprite puzzleButtonBG;
+    private Sprite puzzleButtonBG;
 
-	private int firstGuessIndex, secondGuessIndex;
+    private int firstGuessIndex, secondGuessIndex;
 
-	private bool firstGuess, secondGuess;
+    private bool firstGuess, secondGuess;
 
-	private string firstGuessName, secondGuessName;
+    private string firstGuessName, secondGuessName;
 
-	private int tryCountGuess;
-	private int gameGuess;
-	private int correctGuess;
+    private int tryCountGuess;
+    private int gameGuess;
+    private int correctGuess;
 
-	public void PickAPuzzle(){
+    public void PickAPuzzle()
+    {
+        AudioEffectsManager.Instance.PlayClickSound();
 
-		if (!firstGuess) {
-			firstGuess = true;
-			firstGuessIndex = int.Parse (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name);
+        if(!firstGuess)
+        {
+            firstGuess = true;
+            firstGuessIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
 
-			firstGuessName = puzzleGameSprites [firstGuessIndex].name;
+            firstGuessName = puzzleGameSprites[firstGuessIndex].name;
 
-			StartCoroutine ( 
-				TurnPuzzleButtonUp(
-					puzzleButtonsAnimators[firstGuessIndex],
-					puzzleButtons[firstGuessIndex],
-					puzzleGameSprites[firstGuessIndex]
-				)
-			);		
+            StartCoroutine(
+                TurnPuzzleButtonUp(
+                    puzzleButtonsAnimators[firstGuessIndex],
+                    puzzleButtons[firstGuessIndex],
+                    puzzleGameSprites[firstGuessIndex]
+                )
+            );
 
-		} else if (!secondGuess) {
-			secondGuess = true;
-			secondGuessIndex = int.Parse (UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject.name);
+        }
+        else if(!secondGuess)
+        {
+            secondGuess = true;
+            secondGuessIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
 
-			secondGuessName = puzzleGameSprites [secondGuessIndex].name;
+            secondGuessName = puzzleGameSprites[secondGuessIndex].name;
 
-			StartCoroutine ( 
-				TurnPuzzleButtonUp(
-					puzzleButtonsAnimators[secondGuessIndex],
-					puzzleButtons[secondGuessIndex],
-					puzzleGameSprites[secondGuessIndex]
-				)
-			);		
+            StartCoroutine(
+                TurnPuzzleButtonUp(
+                    puzzleButtonsAnimators[secondGuessIndex],
+                    puzzleButtons[secondGuessIndex],
+                    puzzleGameSprites[secondGuessIndex]
+                )
+            );
 
-			StartCoroutine (CheckPuzzleMatch());
+            StartCoroutine(CheckPuzzleMatch());
 
-			tryCountGuess++;
+            tryCountGuess++;
 
-		}
-	}
+        }
+    }
 
-	void CheckGameFinished(){
-		correctGuess++;
+    void CheckGameFinished()
+    {
+        correctGuess++;
 
-		int HowManyGuesses = 0;
+        int HowManyGuesses = 0;
 
-		if (correctGuess == gameGuess) {
+        if(correctGuess == gameGuess)
+        {
 
-			switch (selectedLevel) {
-			case 1:
-				HowManyGuesses = 5;
-				break;
-			case 2:
-				HowManyGuesses = 10;
-				break;
-			case 3:
-				HowManyGuesses = 15;
-				break;
-			case 4:
-				HowManyGuesses = 20;
-				break;
-			case 5:
-				HowManyGuesses = 25;
-				break;
-			}
-				
-			if (tryCountGuess < HowManyGuesses) {
-				gameFineshedAux.ShowGameFineshedPanel (3);
-				gameSaverAux.Save(selectedLevel, selectedPuzzle, 3);
-			} else if (tryCountGuess < (HowManyGuesses + 5)) {
-				gameFineshedAux.ShowGameFineshedPanel (2);
-				gameSaverAux.Save(selectedLevel, selectedPuzzle, 2);
-			} else {
-				gameFineshedAux.ShowGameFineshedPanel (1);
-				gameSaverAux.Save(selectedLevel, selectedPuzzle, 1);
-			}
-		}
-	}
+            switch(selectedLevel)
+            {
+                case 1:
+                    HowManyGuesses = 5;
+                    break;
+                case 2:
+                    HowManyGuesses = 10;
+                    break;
+                case 3:
+                    HowManyGuesses = 15;
+                    break;
+                case 4:
+                    HowManyGuesses = 20;
+                    break;
+                case 5:
+                    HowManyGuesses = 25;
+                    break;
+            }
 
-	public List<Animator> ResetGameplay(){
-	
-		firstGuess = secondGuess = false;
-		tryCountGuess = 0;
-		correctGuess = 0;
+            if(tryCountGuess < HowManyGuesses)
+            {
+                gameFineshedAux.ShowGameFineshedPanel(3);
+                gameSaverAux.Save(selectedLevel, selectedPuzzle, 3);
+            }
+            else if(tryCountGuess < (HowManyGuesses + 5))
+            {
+                gameFineshedAux.ShowGameFineshedPanel(2);
+                gameSaverAux.Save(selectedLevel, selectedPuzzle, 2);
+            }
+            else
+            {
+                gameFineshedAux.ShowGameFineshedPanel(1);
+                gameSaverAux.Save(selectedLevel, selectedPuzzle, 1);
+            }
+        }
+    }
 
-		gameFineshedAux.HideGameFineshedPanel ();
+    public List<Animator> ResetGameplay()
+    {
 
-		return puzzleButtonsAnimators;
-	}
+        firstGuess = secondGuess = false;
+        tryCountGuess = 0;
+        correctGuess = 0;
+
+        gameFineshedAux.HideGameFineshedPanel();
+
+        return puzzleButtonsAnimators;
+    }
 
 
-	IEnumerator CheckPuzzleMatch(){
+    IEnumerator CheckPuzzleMatch()
+    {
 
-		yield return new WaitForSeconds (1.7f);
+        yield return new WaitForSeconds(1.7f);
 
-		if (firstGuessName == secondGuessName) {
-		
-			puzzleButtonsAnimators[firstGuessIndex].Play ("FadeOut");
-			puzzleButtonsAnimators[secondGuessIndex].Play ("FadeOut");
+        if(firstGuessName == secondGuessName)
+        {
 
-			CheckGameFinished ();
+            puzzleButtonsAnimators[firstGuessIndex].Play("FadeOut");
+            puzzleButtonsAnimators[secondGuessIndex].Play("FadeOut");
 
-		} else {
-		
-			StartCoroutine ( 
-				TurnPuzzleButtonBack(
-					puzzleButtonsAnimators[firstGuessIndex],
-					puzzleButtons[firstGuessIndex],
-					puzzleButtonBG
-				)
-			);	
+            CheckGameFinished();
 
-			StartCoroutine ( 
-				TurnPuzzleButtonBack(
-					puzzleButtonsAnimators[secondGuessIndex],
-					puzzleButtons[secondGuessIndex],
-					puzzleButtonBG
-				)
-			);
+        }
+        else
+        {
 
-		}
+            StartCoroutine(
+                TurnPuzzleButtonBack(
+                    puzzleButtonsAnimators[firstGuessIndex],
+                    puzzleButtons[firstGuessIndex],
+                    puzzleButtonBG
+                )
+            );
 
-		yield return new WaitForSeconds (.7f);
+            StartCoroutine(
+                TurnPuzzleButtonBack(
+                    puzzleButtonsAnimators[secondGuessIndex],
+                    puzzleButtons[secondGuessIndex],
+                    puzzleButtonBG
+                )
+            );
 
-		firstGuess = secondGuess = false;
+        }
 
-	}
+        yield return new WaitForSeconds(.7f);
 
-	IEnumerator TurnPuzzleButtonUp(Animator anim, Button btn, Sprite puzzleImage){
-		anim.Play ("TurnUp");
-		yield return new WaitForSeconds (0.4f);
-		btn.image.sprite = puzzleImage;
-	}
+        firstGuess = secondGuess = false;
 
-	IEnumerator TurnPuzzleButtonBack(Animator anim, Button btn, Sprite puzzleImage){
-		anim.Play ("TurnBack");
-		yield return new WaitForSeconds (0.4f);
-		btn.image.sprite = puzzleImage;
-	}
+    }
 
-	void AddListeners() {
-		foreach (Button btn in this.puzzleButtons) {
-			btn.onClick.RemoveAllListeners();
-			btn.onClick.AddListener(() => PickAPuzzle());
-		}
-	}
+    IEnumerator TurnPuzzleButtonUp(Animator anim, Button btn, Sprite puzzleImage)
+    {
+        anim.Play("TurnUp");
+        yield return new WaitForSeconds(0.4f);
+        btn.image.sprite = puzzleImage;
+    }
 
-	public void SetupButtonsAndAnimators(List<Button> buttons, List<Animator> animators){
-		this.puzzleButtons = buttons;
-		this.puzzleButtonsAnimators = animators;
+    IEnumerator TurnPuzzleButtonBack(Animator anim, Button btn, Sprite puzzleImage)
+    {
+        anim.Play("TurnBack");
+        yield return new WaitForSeconds(0.4f);
+        btn.image.sprite = puzzleImage;
+    }
 
-		puzzleButtonBG = puzzleButtons [0].image.sprite;
+    void AddListeners()
+    {
+        foreach(Button btn in this.puzzleButtons)
+        {
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => PickAPuzzle());
+        }
+    }
 
-		gameGuess = buttons.Count / 2;
+    public void SetupButtonsAndAnimators(List<Button> buttons, List<Animator> animators)
+    {
+        this.puzzleButtons = buttons;
+        this.puzzleButtonsAnimators = animators;
 
-		AddListeners();
-	}
+        puzzleButtonBG = puzzleButtons[0].image.sprite;
 
-	public void SetupPuzzleGameSprites(List<Sprite> sprites){
-		this.puzzleGameSprites = sprites;
-	}
+        gameGuess = buttons.Count / 2;
 
-	public void SetSelectedLevel(int level){
-		this.selectedLevel = level;
-	}
+        AddListeners();
+    }
 
-	public void SetSelectedPuzzle(string puzzle){
-		this.selectedPuzzle = puzzle;
-	}
+    public void SetupPuzzleGameSprites(List<Sprite> sprites)
+    {
+        this.puzzleGameSprites = sprites;
+    }
+
+    public void SetSelectedLevel(int level)
+    {
+        this.selectedLevel = level;
+    }
+
+    public void SetSelectedPuzzle(string puzzle)
+    {
+        this.selectedPuzzle = puzzle;
+    }
 
 }
