@@ -2,38 +2,58 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class SettingsPanelController : MonoBehaviour {
+public class SettingsPanelController : MonoBehaviour
+{
 
-	[SerializeField]
-	private GameObject settingsPanel;
+    [SerializeField]
+    private GameObject settingsPanel;
 
-	[SerializeField]
-	private MusicController musicControllerAux;
+    [SerializeField]
+    private GameObject settingsButton;
 
-	[SerializeField]
-	private Animator settingsAnim;
+    [SerializeField]
+    private MusicController musicControllerAux;
 
-	[SerializeField]
-	private Slider slider;
+    [SerializeField]
+    private Animator settingsAnim;
 
-	public void OpenSettingsPanel(){
-		slider.value = musicControllerAux.GetMusicVolume ();
-		settingsPanel.SetActive (true);
-		settingsAnim.Play ("SlideIn");
-	}
+    [SerializeField]
+    private Slider slider;
 
-	public void CloseSettingsPanel(){
-		StartCoroutine (CloseSettings ());
-	}
+    private void Start()
+    {
+        settingsPanel.GetComponent<Animator>().Play("SlideOut");
+    }
 
-	IEnumerator CloseSettings(){
-		settingsAnim.Play ("SlideOut");
-		yield return new WaitForSeconds (1f);
-		settingsPanel.SetActive (false);
-	}
+    public void OpenSettingsPanel()
+    {
+        slider.value = musicControllerAux.GetMusicVolume();
+        settingsPanel.SetActive(true);
+        settingsButton.gameObject.SetActive(false);
+        settingsAnim.Play("SlideIn");
+    }
 
-	public void SetVolume(float volume){
-		musicControllerAux.SetMusicVolume (volume);
-	}
+    public void CloseSettingsPanel()
+    {
+        StartCoroutine(CloseSettings());
+    }
+
+    IEnumerator CloseSettings()
+    {
+        settingsAnim.Play("SlideOut");
+        yield return new WaitForSeconds(1f);
+        settingsPanel.SetActive(false);
+        settingsButton.gameObject.SetActive(true);
+    }
+
+    public void SetVolume(float volume)
+    {
+        musicControllerAux.SetMusicVolume(volume);
+    }
+
+    public void SetSounds(float volume)
+    {
+        AudioEffectsManager.Instance.audioSource.volume = volume;
+    }
 
 }

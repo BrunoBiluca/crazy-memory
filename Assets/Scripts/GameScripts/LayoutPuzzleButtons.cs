@@ -15,9 +15,6 @@ public class LayoutPuzzleButtons : MonoBehaviour
     public List<Button> level1Buttons, level2Buttons, level3Buttons, level4Buttons, level5Buttons;
     public List<Animator> level1Anims, level2Anims, level3Anims, level4Anims, level5Anims;
 
-    [SerializeField]
-    private Sprite[] puzzleButtonsBG;
-
     private int selectedLevel;
     private PuzzleSO selectedPuzzle;
 
@@ -36,31 +33,35 @@ public class LayoutPuzzleButtons : MonoBehaviour
         switch(selectedLevel)
         {
             case 1:
-                SetupPuzzleLevelButtons(level1Buttons, level1Anims);
+                SetupPuzzleLevelButtons(puzzleGameHolder1, level1Buttons, level1Anims);
                 break;
             case 2:
-                SetupPuzzleLevelButtons(level2Buttons, level2Anims);
+                SetupPuzzleLevelButtons(puzzleGameHolder2, level2Buttons, level2Anims);
                 break;
             case 3:
-                SetupPuzzleLevelButtons(level3Buttons, level3Anims);
+                SetupPuzzleLevelButtons(puzzleGameHolder3, level3Buttons, level3Anims);
                 break;
             case 4:
-                SetupPuzzleLevelButtons(level4Buttons, level4Anims);
+                SetupPuzzleLevelButtons(puzzleGameHolder4, level4Buttons, level4Anims);
                 break;
             case 5:
-                SetupPuzzleLevelButtons(level5Buttons, level5Anims);
+                SetupPuzzleLevelButtons(puzzleGameHolder5, level5Buttons, level5Anims);
                 break;
         }
     }
 
-    private void SetupPuzzleLevelButtons(List<Button> levelButtons, List<Animator> levelAnims)
+    private void SetupPuzzleLevelButtons(
+        Transform puzzleGameHolder, 
+        List<Button> levelButtons, 
+        List<Animator> levelAnims
+    )
     {
         foreach(Button btn in levelButtons)
         {
             if(!btn.gameObject.activeInHierarchy)
             {
                 btn.gameObject.SetActive(true);
-                btn.gameObject.transform.SetParent(puzzleGameHolder1, false);
+                btn.gameObject.transform.SetParent(puzzleGameHolder, false);
 
                 btn.image.sprite = selectedPuzzle.Background;
             }

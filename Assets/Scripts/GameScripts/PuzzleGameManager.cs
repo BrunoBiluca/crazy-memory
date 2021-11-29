@@ -35,16 +35,22 @@ public class PuzzleGameManager : MonoBehaviour
     private int gameGuess;
     private int correctGuess;
 
-    public void PickAPuzzle()
+    private bool showingGuess;
+
+    public void PickAPuzzle(int guessIndex)
     {
+        if(showingGuess) return;
+
+        showingGuess = true;
+
         AudioEffectsManager.Instance.PlayClickSound();
 
         if(!firstGuess)
         {
             firstGuess = true;
-            firstGuessIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
 
-            firstGuessName = puzzleGameSprites[firstGuessIndex].name;
+            firstGuessIndex = guessIndex;
+            firstGuessName = puzzleGameSprites[guessIndex].name;
 
             StartCoroutine(
                 TurnPuzzleButtonUp(
@@ -58,9 +64,9 @@ public class PuzzleGameManager : MonoBehaviour
         else if(!secondGuess)
         {
             secondGuess = true;
-            secondGuessIndex = int.Parse(EventSystem.current.currentSelectedGameObject.name);
 
-            secondGuessName = puzzleGameSprites[secondGuessIndex].name;
+            secondGuessIndex = guessIndex;
+            secondGuessName = puzzleGameSprites[guessIndex].name;
 
             StartCoroutine(
                 TurnPuzzleButtonUp(
@@ -139,7 +145,7 @@ public class PuzzleGameManager : MonoBehaviour
     IEnumerator CheckPuzzleMatch()
     {
 
-        yield return new WaitForSeconds(1.7f);
+        yield return new WaitForSeconds(1f);
 
         if(firstGuessName == secondGuessName)
         {
@@ -174,7 +180,7 @@ public class PuzzleGameManager : MonoBehaviour
         yield return new WaitForSeconds(.7f);
 
         firstGuess = secondGuess = false;
-
+        showingGuess = false;
     }
 
     IEnumerator TurnPuzzleButtonUp(Animator anim, Button btn, Sprite puzzleImage)
@@ -182,6 +188,7 @@ public class PuzzleGameManager : MonoBehaviour
         anim.Play("TurnUp");
         yield return new WaitForSeconds(0.4f);
         btn.image.sprite = puzzleImage;
+        showingGuess = false;
     }
 
     IEnumerator TurnPuzzleButtonBack(Animator anim, Button btn, Sprite puzzleImage)
@@ -189,6 +196,7 @@ public class PuzzleGameManager : MonoBehaviour
         anim.Play("TurnBack");
         yield return new WaitForSeconds(0.4f);
         btn.image.sprite = puzzleImage;
+        btn.interactable = true;
     }
 
     void AddListeners()
@@ -196,7 +204,11 @@ public class PuzzleGameManager : MonoBehaviour
         foreach(Button btn in this.puzzleButtons)
         {
             btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(() => PickAPuzzle());
+            btn.onClick.AddListener(() => {
+                btn.interactable = false;
+                var guessIdx = int.Parse(btn.name);
+                PickAPuzzle(guessIdx);
+            });
         }
     }
 

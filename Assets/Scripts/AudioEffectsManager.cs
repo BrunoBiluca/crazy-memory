@@ -13,7 +13,7 @@ public class AudioEffectsManager : MonoBehaviour
 
     [SerializeField] private AudioClip clickSoundEffect;
 
-    private AudioSource audioSource;
+    public AudioSource audioSource;
 
     private void Awake()
     {

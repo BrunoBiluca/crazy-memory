@@ -84,7 +84,10 @@ public class SelectPuzzleMenuController : MonoBehaviour
         puzzleLevelSelectMenuPanel.SetActive(false);
     }
 
-
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 
 
 }
